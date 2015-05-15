@@ -29,7 +29,7 @@
 //}
 
 static const char *dir_str[] = {
-  "NONE", "R", "W", "RW"
+  "NONE", "W", "R", "RW"
 };
 
 void usage(FILE *out, int code) {
@@ -41,7 +41,7 @@ void usage(FILE *out, int code) {
             "Direction and buffer size are deduced from IOCTL_NUM. It is however\n"
             "possible to force these parameters.\n"
             "\n"
-            "\t-d DIR   force direction: 0 = NONE, 1 = R, 2 = W, 3 = RW\n"
+            "\t-d DIR   force direction: 0 = NONE, 1 = W, 2 = R, 3 = RW\n"
             "\t-s SIZE  force buffer size\n"
             "\t-v VALUE pass this value as ioctl argument instead of a pointer on a buffer. Force direction to NONE\n"
             "\t-q       quiet\n",
