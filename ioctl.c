@@ -115,15 +115,16 @@ int main(int argc, char **argv) {
     const char *file;
     int quiet = 0;
     int opt;
+    char *endptr;
     int i;
 
     while ((opt = getopt(argc, argv, "d:s:v:qh")) != -1) {
         switch (opt) {
             case 'd':
-                errno = 0;
-                force_dir = strtol(optarg, NULL, 0);
-                if (errno) {
+                force_dir = strtol(optarg, &endptr, 0);
+                if (*endptr) {
                     force_dir = -1;
+                    printf("optarg %s\n", optarg);
                     for (i = 0; i < ARRAY_SIZE(dir_str); i++)
                         if (!strcmp(optarg, dir_str[i]))
                             force_dir = i;
@@ -132,15 +133,13 @@ int main(int argc, char **argv) {
                 }
                 break;
             case 's':
-                errno = 0;
-                force_size = strtol(optarg, NULL, 0);
-                if (errno)
+                force_size = strtol(optarg, &endptr, 0);
+                if (*endptr)
                     usage(stderr, EXIT_FAILURE);
                 break;
             case 'v':
-                errno = 0;
-                force_value = (void *) strtol(optarg, NULL, 0);
-                if (errno)
+                force_value = (void *) strtol(optarg, &endptr, 0);
+                if (*endptr)
                     usage(stderr, EXIT_FAILURE);
                 break;
             case 'q':
@@ -157,8 +156,9 @@ int main(int argc, char **argv) {
     if (optind + 2 != argc)
         usage(stderr, EXIT_FAILURE);
     file = argv[optind];
-    errno = 0;
-    ioctl_nr = strtoul(argv[optind + 1], NULL, 0);
+    ioctl_nr = strtoul(argv[optind + 1], &endptr, 0);
+    if (*endptr)
+        usage(stderr, EXIT_FAILURE);
     dir = _IOC_DIR(ioctl_nr);
     size = _IOC_SIZE(ioctl_nr);
     if (!quiet)
