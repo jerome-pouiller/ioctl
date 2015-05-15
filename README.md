@@ -39,13 +39,17 @@ Query capability of you webcam:
 
     ioctl /dev/video0 0x80685600 | hexdump -C
 
-Get current capture format (`0xc0cc5604 = VIDIOC_G_FMT`):
+Save parameters of serial port (`0x5401 == TCGETS`):
 
-    ioctl /dev/video0 0xc0cc5604 > format
+    ioctl /dev/ttyS0 0x5401 -s 1024 -d R > params
 
-Restore capture format after some tests (`0xc0cc5605 = VIDIOC_S_FMT`):
+Notice in this case, ioctl number does not follow convention. We have to force
+size and direction. Also note wa allocate a buffer larger than
+`sizeof(struct termios)`. In most case, it is not a problem.
 
-    ioctl /dev/video0 0xc0cc5605 < format
+After doing some tests, restore parameters of serial port (`0x5402 = TCSETS`):
+
+    ioctl /dev/ttyS0 0x5402 -s 1024 -d W < params
 
 Future work
 -----------
