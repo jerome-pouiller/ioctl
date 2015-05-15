@@ -57,7 +57,7 @@ void sighandler(int signum, siginfo_t *pinfo, void *context) {
     // fprintf(stderr, "ioctl returned with signal %s (%d)\n", strsignal(sig), sig);
 }
 
-void doit(const char *file, int ioctl_nr, void *buf) {
+void doit(const char *file, unsigned long ioctl_nr, void *buf) {
     struct sigaction act = { }, oldact;
     int ret;
     int fd;
@@ -92,11 +92,11 @@ void doit(const char *file, int ioctl_nr, void *buf) {
         fprintf(stderr, "Returned 0\n");
 }
 
-void display_parms(char *prefix, int ioctl_nr, int dir, int size, void *force_value) {
+void display_parms(char *prefix, unsigned long ioctl_nr, int dir, int size, void *force_value) {
     int type = _IOC_TYPE(ioctl_nr);
     int nr = _IOC_NR(ioctl_nr);
 
-    fprintf(stderr, "%s: ioctl=0x%08x, ", prefix, ioctl_nr);
+    fprintf(stderr, "%s: ioctl=0x%08lx, ", prefix, ioctl_nr);
     if (force_value == (void *) -1)
         fprintf(stderr, "direction=%s, arg size=%d bytes, ", dir_str[dir], size);
     else
@@ -108,7 +108,7 @@ void display_parms(char *prefix, int ioctl_nr, int dir, int size, void *force_va
 }
 
 int main(int argc, char **argv) {
-    int ioctl_nr;
+    unsigned long ioctl_nr;
     int dir, force_dir = -1;
     int size, force_size = -1;
     void *buf = NULL, *force_value = (void *) -1;
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
         usage(stderr, EXIT_FAILURE);
     file = argv[optind];
     errno = 0;
-    ioctl_nr = strtol(argv[optind + 1], NULL, 0);
+    ioctl_nr = strtoul(argv[optind + 1], NULL, 0);
     dir = _IOC_DIR(ioctl_nr);
     size = _IOC_SIZE(ioctl_nr);
     if (!quiet)
