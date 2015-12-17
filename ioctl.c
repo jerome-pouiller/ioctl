@@ -21,12 +21,6 @@
 
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof(A[0]))
-#define IOCTL_ENTRY_ADV(X, DIR, SZ) { X, STRINGIFY(X), -1 , -1 },
-#define IOCTL_ENTRY(X) IOCTL_ENTRY_ADV(X, -1, -1)
-
-//static const char *ioctl_list[] = {
-//    IOCTL_ENTRY()
-//}
 
 static const char *dir_str[] = {
   "NONE", "W", "R", "RW"

@@ -10,10 +10,11 @@
 
 struct ioctl_entry {
     const char *name;
-    int value;
+    int val;
+    int dir;
+    int size;
 };
+extern const struct ioctl_entry ioctls_list[];
 
-#define STRINGIFY(X) #X
-#define DECLARE_IOCTL(X) { STRINGIFY(X), X }
 #endif /* IOCTLS_LIST_H */
 

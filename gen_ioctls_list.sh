@@ -55,13 +55,14 @@ if [ -n $ARCH ]; then
         sed -e "s|$SYSROOT/usr/include/$ARCH/\(.*\)|#include <\1>|"
 fi
 echo
-echo "const struct ioctl_entry ioctl_list[] = {"
+echo "const struct ioctl_entry ioctls_list[] = {"
 grep -nr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(]*[ \t]_IO[RW]*(' "$SYSROOT/usr/include" |
     grep -v $EXCLUDE_IOCTLS |
-    sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ \t]*\([A-Z0-9x_]*\).*|    DECLARE_IOCTL(\2), // \1|"
+    sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ \t]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
 if [ -n $ARCH ]; then
     grep -nr $EXCLUDE_FILES '^#define[^(]*[ \t]_IO[RW]*(' "$SYSROOT/usr/include/$ARCH" |
         grep -v $EXCLUDE_IOCTLS |
-        sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ \t]*\([A-Z0-9x_]*\).*|    DECLARE_IOCTL(\2), // \1|"
+        sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ \t]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
 fi
+echo "    { NULL, 0 },"
 echo "};"
