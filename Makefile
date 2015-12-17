@@ -13,8 +13,8 @@ all: ioctl
 ioctl: ioctl.o
 -include ioctl.d
 
-ioctls_list.c: genIoctlsList.sh
-	./genIoctlsList.sh $(CC) > ioctls_list.c
+ioctls_list.c: gen_ioctls_list.sh
+	bash $< $(CC) > $@
 
 %.o: %.c
 	$(COMPILE.c) -MMD -c -o $@ $<
