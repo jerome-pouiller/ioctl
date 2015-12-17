@@ -12,9 +12,12 @@ SYSROOT=$($CC -print-sysroot)
 ARCH=$($CC -print-multiarch)
 EXCLUDE_FILES+=" --exclude auto_fs.h"           # compat_ulong_t undeclared
 EXCLUDE_FILES+=" --exclude coda.h"              # Include linux/time.h which conflict with time.h
-EXCLUDE_FILES+=" --exclude if_ppp.h"            # net/if_ppp.h conflict with linux/ppp-ioctl.h
+# EXCLUDE_FILES+=" --exclude if_ppp.h"          # net/if_ppp.h conflict with linux/ppp-ioctl.h
+EXCLUDE_FILES+=" --exclude ppp-ioctl.h"         # linux/ppp-ioctl.h conflict with net/if_ppp.h
 EXCLUDE_FILES+=" --exclude ioctl.h"             # Does not contains any ioctl in fact
 EXCLUDE_FILES+=" --exclude mount.h"             # sys/mount.h conflict with linux/fs.h
+EXCLUDE_FILES+=" --exclude asequencer.h"        # Lack of type definition
+EXCLUDE_FILES+=" --exclude-dir Peripherals"     # Old versions of linux/fmd/Peripherals/ missed many files
 EXCLUDE_IOCTLS+=" -e USBDEVFS_CONTROL32"        # Lack type size
 EXCLUDE_IOCTLS+=" -e USBDEVFS_BULK32"           # Lack type size
 EXCLUDE_IOCTLS+=" -e USBDEVFS_SUBMITURB32"      # Lack type size
@@ -41,7 +44,7 @@ EXCLUDE_IOCTLS+=" -e BLKELVSET"                 # Inside #if 0
 
 echo '#include <unistd.h>'  # size_t
 echo '#include <net/if.h>'  # IFNAMSIZ at linux/isdn_ppp.h:38
-# echo '#include <stdint.h>'  # intX_t
+echo '#include <stdint.h>'  # For alsa headers
 # echo '#include <time.h>'    # alsa headers
 # echo '#include <termios.h>' # struct termios2
 echo '#include "ioctls_list.h"'
