@@ -11,7 +11,9 @@ PREFIX = /usr/local
 all: ioctl
 
 ioctl: ioctl.o
+ioctl: ioctls_list.o
 -include ioctl.d
+-include ioctls_list.d
 
 ioctls_list.c: gen_ioctls_list.sh
 	bash $< $(CC) > $@
