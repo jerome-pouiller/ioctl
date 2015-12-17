@@ -18,7 +18,7 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include "ioctls_list.h"
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof(A[0]))
 
@@ -103,8 +103,8 @@ void display_parms(char *prefix, unsigned long ioctl_nr, int dir, int size, void
 
 int main(int argc, char **argv) {
     unsigned long ioctl_nr;
-    int dir, force_dir = -1;
-    int size, force_size = -1;
+    int dir = -1, force_dir = -1;
+    int size = -1, force_size = -1;
     void *buf = NULL, *force_value = (void *) -1;
     const char *file;
     int quiet = 0;
@@ -151,10 +151,23 @@ int main(int argc, char **argv) {
         usage(stderr, EXIT_FAILURE);
     file = argv[optind];
     ioctl_nr = strtoul(argv[optind + 1], &endptr, 0);
-    if (*endptr)
-        usage(stderr, EXIT_FAILURE);
-    dir = _IOC_DIR(ioctl_nr);
-    size = _IOC_SIZE(ioctl_nr);
+    if (*endptr) {
+        ioctl_nr = 0;
+        for (i = 0; ioctls_list[i].name; i++) {
+            if (!strcmp(argv[optind + 1], ioctls_list[i].name)) {
+                ioctl_nr = ioctls_list[i].val;
+                dir = ioctls_list[i].dir;
+                size = ioctls_list[i].size;
+                break;
+            }
+        }
+        if (!ioctl_nr)
+            error(1, 0, "Cannot find %s ioctl value", argv[optind + 1]);
+    }
+    if (dir == -1)
+        dir = _IOC_DIR(ioctl_nr);
+    if (size == -1)
+        size = _IOC_SIZE(ioctl_nr);
     if (!quiet)
         display_parms("Decoded values", ioctl_nr, dir, size, (void *) -1);
     if (force_value != (void *) -1 && force_size != -1)
