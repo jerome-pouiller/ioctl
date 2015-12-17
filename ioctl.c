@@ -102,22 +102,33 @@ void display_parms(const char *prefix, unsigned ioctl_nr, int dir, int size, voi
 }
 
 void list_ioctls() {
-    unsigned long ioctl_nr;
+    unsigned ioctl_nr;
     int dir;
     int size;
+    int type;
+    int nr;
     int i;
-    char buf[255];
 
     for (i = 0; ioctls_list[i].name; i++) {
         ioctl_nr = ioctls_list[i].val;
         dir = ioctls_list[i].dir;
         size = ioctls_list[i].size;
+        type = _IOC_TYPE(ioctl_nr);
+        nr = _IOC_NR(ioctl_nr);
         if (dir == -1)
             dir = _IOC_DIR(ioctl_nr);
         if (size == -1)
             size = _IOC_SIZE(ioctl_nr);
-        snprintf(buf, sizeof(buf), "%30s", ioctls_list[i].name);
-        display_parms(buf, ioctl_nr, dir, size, (void *) -1);
+        printf("%-40s 0x%08x, ", ioctls_list[i].name, ioctl_nr);
+        if (!dir)
+            printf("%4s, %2d bytes, 0x%02x ", dir_str[dir], size, type);
+        else
+            printf("%2s, %4d bytes, 0x%02x ", dir_str[dir], size, type);
+        if (isprint(type))
+            printf("'%c'", (char) type);
+        else
+            printf("   ");
+        printf(", %u\n", nr);
     }
 }
 
