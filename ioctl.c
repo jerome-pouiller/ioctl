@@ -35,6 +35,7 @@ void usage(FILE *out, int code) {
             "Direction and buffer size are deduced from IOCTL_NUM. It is however\n"
             "possible to force these parameters.\n"
             "\n"
+            "\t-L       Instead of normal behavior, list known ioctls\n"
             "\t-d DIR   force direction: 0 = NONE, 1 = W, 2 = R, 3 = RW\n"
             "\t-s SIZE  force buffer size\n"
             "\t-v VALUE pass this value as ioctl argument instead of a pointer on a buffer. Force direction to NONE\n"
@@ -42,7 +43,6 @@ void usage(FILE *out, int code) {
             program_invocation_short_name);
     exit(code);
 }
-
 
 void sighandler(int signum, siginfo_t *pinfo, void *context) {
     signum = signum;
@@ -101,6 +101,26 @@ void display_parms(char *prefix, unsigned long ioctl_nr, int dir, int size, void
     fprintf(stderr, ", function number=%u\n", nr);
 }
 
+void list_ioctls() {
+    unsigned long ioctl_nr;
+    int dir;
+    int size;
+    int i;
+    char buf[255];
+
+    for (i = 0; ioctls_list[i].name; i++) {
+        ioctl_nr = ioctls_list[i].val;
+        dir = ioctls_list[i].dir;
+        size = ioctls_list[i].size;
+        if (dir == -1)
+            dir = _IOC_DIR(ioctl_nr);
+        if (size == -1)
+            size = _IOC_SIZE(ioctl_nr);
+        snprintf(buf, sizeof(buf), "%30s", ioctls_list[i].name);
+        display_parms(buf, ioctl_nr, dir, size, (void *) -1);
+    }
+}
+
 int main(int argc, char **argv) {
     unsigned long ioctl_nr;
     int dir = -1, force_dir = -1;
@@ -112,7 +132,7 @@ int main(int argc, char **argv) {
     char *endptr;
     int i;
 
-    while ((opt = getopt(argc, argv, "d:s:v:qh")) != -1) {
+    while ((opt = getopt(argc, argv, "d:s:v:qLh")) != -1) {
         switch (opt) {
             case 'd':
                 force_dir = strtol(optarg, &endptr, 0);
@@ -138,6 +158,10 @@ int main(int argc, char **argv) {
                 break;
             case 'q':
                 quiet = 1;
+                break;
+            case 'L':
+                list_ioctls();
+                exit(0);
                 break;
             case 'h':
                 usage(stdout, 0);
