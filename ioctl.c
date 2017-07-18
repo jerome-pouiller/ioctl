@@ -56,6 +56,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
     int ret;
     int fd;
     int i;
+	int ioctl_errno;
 
     fd = open(file, O_RDWR);
     if (fd < 0 && (errno == EPERM || errno == EACCES))
@@ -73,6 +74,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
             sigaction(i, &act, NULL);
     }
     ret = ioctl(fd, ioctl_nr, buf);
+	ioctl_errno = errno;
     memset(&act, 0, sizeof(act));
     act.sa_handler = NULL;
     for (i = 0; i < NSIG; i++) {
@@ -81,7 +83,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
             sigaction(i, &act, NULL);
     }
     if (ret)
-        fprintf(stderr, "Returned %d (errno: %d, \"%m\")\n", ret, errno);
+        fprintf(stderr, "Returned %d (errno: %d, \"%s\")\n", ret, ioctl_errno, strerror(ioctl_errno));
     else
         fprintf(stderr, "Returned 0\n");
 }
