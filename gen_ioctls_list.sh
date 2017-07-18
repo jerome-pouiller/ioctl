@@ -55,6 +55,7 @@ echo '/* In case of problem, please read README.md */'
 echo '#include <unistd.h>'  # size_t
 echo '#include <net/if.h>'  # IFNAMSIZ at linux/isdn_ppp.h:38
 echo '#include <stdint.h>'  # For alsa headers
+echo '#include <limits.h>'  # For NAME_MAX
 echo '#include <asm/termbits.h>' # struct termios2
 # Place here your extra headers
 echo '#include "ioctls_list.h"'

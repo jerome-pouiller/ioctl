@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <net/if.h>
 #include <stdint.h>
+#include <limits.h>
 #include <asm/termbits.h>
 #include "ioctls_list.h"
 #include <asm-generic/ioctls.h>
