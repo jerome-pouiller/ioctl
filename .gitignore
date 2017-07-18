@@ -1,0 +1,4 @@
+*.d
+*.o
+ioctl
+ioctls_list.c
