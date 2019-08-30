@@ -94,7 +94,7 @@
 #include <linux/atm_tcp.h>
 #include <linux/atm_eni.h>
 #include <linux/uvcvideo.h>
-#include <linux/nvme.h>
+#include <linux/nvme_ioctl.h>
 #include <linux/hpet.h>
 #include <linux/sonypi.h>
 #include <linux/udf_fs_i.h>
@@ -417,7 +417,6 @@ const struct ioctl_entry ioctls_list[] = {
     { "CA_GET_MSG", CA_GET_MSG, -1, -1 }, // linux/dvb/ca.h:85
     { "CA_SEND_MSG", CA_SEND_MSG, -1, -1 }, // linux/dvb/ca.h:86
     { "CA_SET_DESCR", CA_SET_DESCR, -1, -1 }, // linux/dvb/ca.h:87
-    { "CA_SET_PID", CA_SET_PID, -1, -1 }, // linux/dvb/ca.h:88
     { "VIDEO_STOP", VIDEO_STOP, -1, -1 }, // linux/dvb/video.h:227
     { "VIDEO_PLAY", VIDEO_PLAY, -1, -1 }, // linux/dvb/video.h:228
     { "VIDEO_FREEZE", VIDEO_FREEZE, -1, -1 }, // linux/dvb/video.h:229
@@ -493,8 +492,6 @@ const struct ioctl_entry ioctls_list[] = {
     { "DMX_SET_PES_FILTER", DMX_SET_PES_FILTER, -1, -1 }, // linux/dvb/dmx.h:144
     { "DMX_SET_BUFFER_SIZE", DMX_SET_BUFFER_SIZE, -1, -1 }, // linux/dvb/dmx.h:145
     { "DMX_GET_PES_PIDS", DMX_GET_PES_PIDS, -1, -1 }, // linux/dvb/dmx.h:146
-    { "DMX_GET_CAPS", DMX_GET_CAPS, -1, -1 }, // linux/dvb/dmx.h:147
-    { "DMX_SET_SOURCE", DMX_SET_SOURCE, -1, -1 }, // linux/dvb/dmx.h:148
     { "DMX_GET_STC", DMX_GET_STC, -1, -1 }, // linux/dvb/dmx.h:149
     { "DMX_ADD_PID", DMX_ADD_PID, -1, -1 }, // linux/dvb/dmx.h:150
     { "DMX_REMOVE_PID", DMX_REMOVE_PID, -1, -1 }, // linux/dvb/dmx.h:151
@@ -848,8 +845,6 @@ const struct ioctl_entry ioctls_list[] = {
     { "KVM_X86_SETUP_MCE", KVM_X86_SETUP_MCE, -1, -1 }, // linux/kvm.h:1008
     { "KVM_X86_GET_MCE_CAP_SUPPORTED", KVM_X86_GET_MCE_CAP_SUPPORTED, -1, -1 }, // linux/kvm.h:1009
     { "KVM_X86_SET_MCE", KVM_X86_SET_MCE, -1, -1 }, // linux/kvm.h:1010
-    { "KVM_IA64_VCPU_GET_STACK", KVM_IA64_VCPU_GET_STACK, -1, -1 }, // linux/kvm.h:1012
-    { "KVM_IA64_VCPU_SET_STACK", KVM_IA64_VCPU_SET_STACK, -1, -1 }, // linux/kvm.h:1013
     { "KVM_GET_VCPU_EVENTS", KVM_GET_VCPU_EVENTS, -1, -1 }, // linux/kvm.h:1015
     { "KVM_SET_VCPU_EVENTS", KVM_SET_VCPU_EVENTS, -1, -1 }, // linux/kvm.h:1016
     { "KVM_GET_DEBUGREGS", KVM_GET_DEBUGREGS, -1, -1 }, // linux/kvm.h:1018
