@@ -10,6 +10,14 @@
 CC=$1
 SYSROOT=$($CC -print-sysroot)
 ARCH=$($CC -print-multiarch)
+# These subdirectories come from the include/uapi of the linux kernel. If
+# ioctls appears outside of these directories, it means either it come from
+# staging (and it is not stable), or it is architecture dependent or it some
+# from a third-aprty (valgrind for exemple)
+# Also exclude "drm" directory since it is not exported on most of distibutions
+SUBDIRS=" linux misc mtd rdma scsi sound video xen asm-generic $ARCH/asm"
+INCDIRS="$(for s in $SUBDIRS; do echo " $SYSROOT/usr/include/$s"; done)"
+
 EXCLUDE_FILES+=" --exclude auto_fs.h"           # compat_ulong_t undeclared
 EXCLUDE_FILES+=" --exclude coda.h"              # Include linux/time.h which conflict with time.h
 # EXCLUDE_FILES+=" --exclude if_ppp.h"          # net/if_ppp.h conflict with linux/ppp-ioctl.h
@@ -58,22 +66,15 @@ echo '#include <stdint.h>'  # For alsa headers
 echo '#include <asm/termbits.h>' # struct termios2
 # Place here your extra headers
 echo '#include "ioctls_list.h"'
-( grep -lr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(].*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
-    sed -e "s|$SYSROOT/usr/include/\(.*\)|#include <\1>|"
-if [ -n $ARCH ]; then
-    grep -lr $EXCLUDE_FILES '^#define[^(].*[ 	]_IO[RW]*(' "$SYSROOT/usr/include/$ARCH" |
-        sed -e "s|$SYSROOT/usr/include/$ARCH/\(.*\)|#include <\1>|"
-fi ) | sort
+grep -lr $EXCLUDE_FILES '^#define[^(].*[ 	]_IO[RW]*(' $INCDIRS |
+    sed -e "s|$SYSROOT/usr/include/\($ARCH/\)\?\(.*\)|#include <\2>|" | sort
+
 echo
 echo "const struct ioctl_entry ioctls_list[] = {"
-( grep -nr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(]*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
+grep -nr $EXCLUDE_FILES '^#define[^(]*[ 	]_IO[RW]*(' $INCDIRS |
     grep -v $EXCLUDE_IOCTLS |
-    sed -e "s|$SYSROOT/usr/include/\(.*\):.*:#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
-if [ -n $ARCH ]; then
-    grep -nr $EXCLUDE_FILES '^#define[^(]*[ \t]_IO[RW]*(' "$SYSROOT/usr/include/$ARCH" |
-        grep -v $EXCLUDE_IOCTLS |
-        sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
-fi ) | sort
+    sed -e "s|$SYSROOT/usr/include/\(.*\):.*:#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|" |
+    sort
 # Place here you extra entries
 echo "    { NULL, 0 },"
 echo "};"
