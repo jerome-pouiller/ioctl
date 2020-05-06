@@ -95,6 +95,13 @@ work and some ioctls cannot be resolved because it lacks type definition. Most
 of these error should addressed with patchs in kernel headers. Meanwhile, you
 may have to patch `gen_ioctls_list.sh` in order to make work.
 
+If you don't want to bother with `ioctls_list.s` and `gen_ioctls_list.sh` you
+can compile with `IGNORE_IOCTLS_LIST=1`:
+
+    make IGNORE_IOCTLS_LIST=1
+
+You won't have symbolic ioctls names, but it is sufficient for make some tests.
+
 Bugs
 ----
 

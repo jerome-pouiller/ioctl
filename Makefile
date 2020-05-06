@@ -11,9 +11,11 @@ PREFIX = /usr/local
 all: ioctl
 
 ioctl: ioctl.o
+ifdef IGNORE_IOCTLS_LIST
+ioctl: ioctls_list_empty.o
+else
 ioctl: ioctls_list.o
--include ioctl.d
--include ioctls_list.d
+endif
 
 ioctls_list.c: gen_ioctls_list.sh
 	bash $< $(CC) > $@
@@ -30,4 +32,5 @@ distclean: clean
 install:
 	install -s -D -m 755 ioctl $(PREFIX)/bin
 
+-include $(wildcard *.d)
 
