@@ -58,22 +58,22 @@ echo '#include <stdint.h>'  # For alsa headers
 echo '#include <asm/termbits.h>' # struct termios2
 # Place here your extra headers
 echo '#include "ioctls_list.h"'
-grep -lr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(].*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
+( grep -lr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(].*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
     sed -e "s|$SYSROOT/usr/include/\(.*\)|#include <\1>|"
 if [ -n $ARCH ]; then
     grep -lr $EXCLUDE_FILES '^#define[^(].*[ 	]_IO[RW]*(' "$SYSROOT/usr/include/$ARCH" |
         sed -e "s|$SYSROOT/usr/include/$ARCH/\(.*\)|#include <\1>|"
-fi
+fi ) | sort
 echo
 echo "const struct ioctl_entry ioctls_list[] = {"
-grep -nr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(]*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
+( grep -nr $EXCLUDE_FILES --exclude-dir \*-linux-\* '^#define[^(]*[ 	]_IO[RW]*(' "$SYSROOT/usr/include" |
     grep -v $EXCLUDE_IOCTLS |
-    sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
+    sed -e "s|$SYSROOT/usr/include/\(.*\):.*:#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
 if [ -n $ARCH ]; then
     grep -nr $EXCLUDE_FILES '^#define[^(]*[ \t]_IO[RW]*(' "$SYSROOT/usr/include/$ARCH" |
         grep -v $EXCLUDE_IOCTLS |
         sed -e "s|$SYSROOT/usr/include/\(.*:.*\):#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|"
-fi
+fi ) | sort
 # Place here you extra entries
 echo "    { NULL, 0 },"
 echo "};"
