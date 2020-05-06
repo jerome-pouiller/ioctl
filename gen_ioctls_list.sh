@@ -50,20 +50,25 @@ EXCLUDE_IOCTLS+=" -e BLKELVSET"                 # Inside #if 0
 #  - Sometime, ioctls disappear and it break compilation
 #  - Sometime, header are renamed or disapear and it brreak compilation
 
+drop_prefix() {
+    sed -re "s|$SYSROOT/usr/include/($ARCH/)?||g"
+}
+
 get_header_list() {
     grep -lr $EXCLUDE_FILES '^#define[^(].*[ 	]_IO[RW]*(' $INCDIRS
 }
 
 show_includes() {
     HEADERS="$1"
-    echo "$HEADERS" | sed -e "s|$SYSROOT/usr/include/\($ARCH/\)\?\(.*\)|#include <\2>|" | sort
+    echo "$HEADERS" | drop_prefix | sed -e "s|\(.*\)|#include <\1>|" | sort
 }
 
 show_ioctls() {
     HEADERS="$1"
     grep -n '^#define[^(]*[ 	]_IO[RW]*(' $HEADERS |
+        drop_prefix |
         grep -v $EXCLUDE_IOCTLS |
-        sed -e "s|$SYSROOT/usr/include/\(.*\):.*:#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|" |
+        sed -e "s|\(.*\):.*:#define[ 	]*\([A-Z0-9x_]*\).*|    { \"\2\", \2, -1, -1 }, // \1|" |
         sort
 }
 
