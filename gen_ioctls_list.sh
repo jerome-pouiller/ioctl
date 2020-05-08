@@ -11,32 +11,32 @@ CC=$1
 SYSROOT=$($CC -print-sysroot)
 ARCH=$($CC -print-multiarch)
 # These subdirectories come from the include/uapi of the linux kernel. If
-# ioctls appears outside of these directories, it means either it come from
-# staging (and it is not stable), or it is architecture dependent or it some
-# from a third-aprty (valgrind for exemple)
-# Also exclude "drm" directory since it is not exported on most of distibutions
+# ioctls appear outside of these directories, it means either they come from
+# staging (and are not stable), or they are architecture dependent or from
+# a third-party (valgrind for example).
+# Also exclude "drm" directory since it is not exported on most distibutions
 SUBDIRS=" linux misc mtd rdma scsi sound video xen asm-generic $ARCH/asm"
 INCDIRS="$(for s in $SUBDIRS; do echo " $SYSROOT/usr/include/$s"; done)"
 
 EXCLUDE_FILES+=" --exclude kfd_ioctl.h"         # Need drm/drm.h
 EXCLUDE_FILES+=" --exclude kvm.h"               # Too many architecture dependent ioctls
 EXCLUDE_FILES+=" --exclude coda.h"              # Include time.h
-EXCLUDE_FILES+=" --exclude ioctl.h"             # Does not contains any ioctl in fact
-EXCLUDE_IOCTLS+=" -e AUTOFS_IOC_SETTIMEOUT32"   # Lack type size
-EXCLUDE_IOCTLS+=" -e USBDEVFS_CONTROL32"        # Lack type size
-EXCLUDE_IOCTLS+=" -e USBDEVFS_BULK32"           # Lack type size
-EXCLUDE_IOCTLS+=" -e USBDEVFS_SUBMITURB32"      # Lack type size
-EXCLUDE_IOCTLS+=" -e USBDEVFS_DISCSIGNAL32"     # Lack type size
-EXCLUDE_IOCTLS+=" -e USBDEVFS_IOCTL32"          # Lack type size
-EXCLUDE_IOCTLS+=" -e BLKTRACESETUP"             # Lack type size
-EXCLUDE_IOCTLS+=" -e FS_IOC_FIEMAP"             # Lack type size
-EXCLUDE_IOCTLS+=" -e BTRFS_IOC_SET_FSLABEL"     # Lack type size
-EXCLUDE_IOCTLS+=" -e BTRFS_IOC_GET_FSLABEL"     # Lack type size
-EXCLUDE_IOCTLS+=" -e BTRFS_IOC_DEFRAG_RANGE"    # Lack type size
-EXCLUDE_IOCTLS+=" -e XSDFEC_IS_ACTIVE"          # Lack type size
-EXCLUDE_IOCTLS+=" -e XSDFEC_SET_BYPASS"         # Lack type size
-EXCLUDE_IOCTLS+=" -e TIOCGISO7816"              # Lack type size
-EXCLUDE_IOCTLS+=" -e TIOCSISO7816"              # Lack type size
+EXCLUDE_FILES+=" --exclude ioctl.h"             # Does not contain any ioctls
+EXCLUDE_IOCTLS+=" -e AUTOFS_IOC_SETTIMEOUT32"   # Lacks type size
+EXCLUDE_IOCTLS+=" -e USBDEVFS_CONTROL32"        # Lacks type size
+EXCLUDE_IOCTLS+=" -e USBDEVFS_BULK32"           # Lacks type size
+EXCLUDE_IOCTLS+=" -e USBDEVFS_SUBMITURB32"      # Lacks type size
+EXCLUDE_IOCTLS+=" -e USBDEVFS_DISCSIGNAL32"     # Lacks type size
+EXCLUDE_IOCTLS+=" -e USBDEVFS_IOCTL32"          # Lacks type size
+EXCLUDE_IOCTLS+=" -e BLKTRACESETUP"             # Lacks type size
+EXCLUDE_IOCTLS+=" -e FS_IOC_FIEMAP"             # Lacks type size
+EXCLUDE_IOCTLS+=" -e BTRFS_IOC_SET_FSLABEL"     # Lacks type size
+EXCLUDE_IOCTLS+=" -e BTRFS_IOC_GET_FSLABEL"     # Lacks type size
+EXCLUDE_IOCTLS+=" -e BTRFS_IOC_DEFRAG_RANGE"    # Lacks type size
+EXCLUDE_IOCTLS+=" -e XSDFEC_IS_ACTIVE"          # Lacks type size
+EXCLUDE_IOCTLS+=" -e XSDFEC_SET_BYPASS"         # Lacks type size
+EXCLUDE_IOCTLS+=" -e TIOCGISO7816"              # Lacks type size
+EXCLUDE_IOCTLS+=" -e TIOCSISO7816"              # Lacks type size
 EXCLUDE_IOCTLS+=" -e COMPAT_ATM_ADDPARTY"       # Parsing error
 EXCLUDE_IOCTLS+=" -e MMC_IOC_MULTI_CMD"         # Missing include
 EXCLUDE_IOCTLS+=" -e MMC_IOC_CMD"               # Missing include
@@ -44,11 +44,11 @@ EXCLUDE_IOCTLS+=" -e BLKELVGET"                 # Inside #if 0
 EXCLUDE_IOCTLS+=" -e BLKELVSET"                 # Inside #if 0
 
 # There are multiple problems:
-#  - some delaration does not match regular expression -> Not yet supported
-#    (possibility to add them manually to list, but there are problem with
+#  - Some declarations do not match regular expression -> Not yet supported
+#    (possibility to add them manually to list, but there are problems with
 #    foreign platforms)
-#  - Sometime, ioctls disappear and it break compilation
-#  - Sometime, header are renamed or disapear and it brreak compilation
+#  - Sometimes, ioctls disappear and this breaks compilation
+#  - Sometimes, headers are renamed or disappear and this breaks compilation
 
 drop_prefix() {
     sed -re "s|$SYSROOT/usr/include/($ARCH/)?||g"
@@ -79,13 +79,13 @@ get_c_file() {
     echo '#include "ioctls_list.h"'
     echo '#include <asm/termbits.h>' # struct termios2
     echo '#include <linux/types.h>'  # other types
-    # Place here your extra headers
+    # Place your extra headers here
     echo
     show_includes "$HEADERS"
     echo
     echo "const struct ioctl_entry ioctls_list[] = {"
     show_ioctls "$HEADERS"
-    # Place here you extra entries
+    # Place your extra entries here
     echo "    { NULL, 0 },"
     echo "};"
 }
