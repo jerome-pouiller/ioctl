@@ -32,7 +32,7 @@ void usage(FILE *out, int code) {
             "Call ioctl IOCTL_NUM on FILEDEV.\n"
             "A buffer is allocated and passed as argument of ioctl. If direction is\n"
             "not 'NONE', buffer content is read/write on standard input/ouput.\n"
-            "Direction and buffer size are deduced from IOCTL_NUM. It is however\n"
+            "Direction and buffer size are deduced from IOCTL_NUM. However, it is\n"
             "possible to force these parameters.\n"
             "\n"
             "\t-L       Instead of normal behavior, list known ioctls\n"
