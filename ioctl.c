@@ -58,7 +58,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
     int i;
 
     fd = open(file, O_RDWR);
-    if (fd < 0 && errno == EPERM)
+    if (fd < 0 && (errno == EPERM || errno == EACCES))
         fd = open(file, O_RDONLY);
     if (fd < 0) {
         error(1, errno, "Cannot open %s: ", file);
