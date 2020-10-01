@@ -54,7 +54,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
     int ret;
     int fd;
     int i;
-	int ioctl_errno;
+    int ioctl_errno;
 
     fd = open(file, O_RDWR);
     if (fd < 0 && (errno == EPERM || errno == EACCES))
@@ -72,7 +72,7 @@ void doit(const char *file, unsigned long ioctl_nr, void *buf) {
             sigaction(i, &act, NULL);
     }
     ret = ioctl(fd, ioctl_nr, buf);
-	ioctl_errno = errno;
+    ioctl_errno = errno;
     memset(&act, 0, sizeof(act));
     act.sa_handler = NULL;
     for (i = 0; i < NSIG; i++) {
