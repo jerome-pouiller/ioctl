@@ -1,9 +1,7 @@
 /* vim: set sw=4 expandtab: */
 /*
- * Licence: GPL
- * Created: 2015-12-17 14:41:27+01:00
- * Main authors:
- *     - Jérôme Pouiller <jezz@sysmic.org>
+ * Licence: GPLv2+
+ * Copyright (c) 2015-2020, Jérôme Pouiller
  */
 #ifndef IOCTLS_LIST_H
 # define IOCTLS_LIST_H

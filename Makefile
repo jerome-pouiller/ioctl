@@ -1,8 +1,6 @@
 #
-# Licence: GPL
-# Created: 2015-05-15 10:04:49+02:00
-# Main authors:
-#     - Jérôme Pouiller <jezz@sysmic.org>
+# Licence: GPLv2+
+# Copyright (c) 2015-2020, Jérôme Pouiller
 #
 CC = gcc
 CFLAGS= -Wall

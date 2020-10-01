@@ -1,9 +1,7 @@
 /* vim: set sw=4 expandtab: */
 /*
- * Licence: GPL
- * Created: 2015-05-12 09:53:35+02:00
- * Main authors:
- *     - Jérôme Pouiller <jezz@sysmic.org>
+ * Licence: GPLv2+
+ * Copyright (c) 2015-2020, Jérôme Pouiller
  */
 #define _GNU_SOURCE
 #include <stdio.h>
