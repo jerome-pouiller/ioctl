@@ -95,7 +95,7 @@ work and some ioctls cannot be resolved because it lacks type definitions. Most
 of these errors should addressed with patches to kernel headers. Meanwhile, you
 may have to patch `gen_ioctls_list.sh` in order to make it work.
 
-If you don't want to bother with `ioctls_list.s` and `gen_ioctls_list.sh` you
+If you don't want to bother with `ioctls_list.c` and `gen_ioctls_list.sh` you
 can compile with `IGNORE_IOCTLS_LIST=1`:
 
     make IGNORE_IOCTLS_LIST=1
