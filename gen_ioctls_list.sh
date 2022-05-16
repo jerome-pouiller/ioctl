@@ -81,6 +81,9 @@ get_c_file() {
     echo '#include "ioctls_list.h"'
     echo '#include <asm/termbits.h>' # struct termios2
     echo '#include <linux/types.h>'  # other types
+    echo 
+    echo 'typedef __u32 u32;'
+    echo 'typedef __u64 u64;'
     # Place your extra headers here
     echo
     show_includes "$HEADERS"
