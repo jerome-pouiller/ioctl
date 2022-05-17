@@ -15,6 +15,7 @@ else
 ioctl: ioctls_list.o
 endif
 
+.PHONY: ioctls_list.c
 ioctls_list.c: gen_ioctls_list.sh
 	bash $< $(CC) > $@
 
