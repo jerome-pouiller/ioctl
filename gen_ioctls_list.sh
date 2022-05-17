@@ -35,6 +35,7 @@ EXCLUDE_IOCTLS+=" -e XSDFEC_IS_ACTIVE"          # Lacks type size
 EXCLUDE_IOCTLS+=" -e XSDFEC_SET_BYPASS"         # Lacks type size
 EXCLUDE_IOCTLS+=" -e TIOCGISO7816"              # Lacks type size
 EXCLUDE_IOCTLS+=" -e TIOCSISO7816"              # Lacks type size
+EXCLUDE_IOCTLS+=" -e RFKILL_IOCTL_MAX_SIZE"     # Parsing error
 EXCLUDE_IOCTLS+=" -e COMPAT_ATM_ADDPARTY"       # Parsing error
 EXCLUDE_IOCTLS+=" -e MMC_IOC_MULTI_CMD"         # Missing include
 EXCLUDE_IOCTLS+=" -e MMC_IOC_CMD"               # Missing include
